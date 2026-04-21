@@ -74,9 +74,10 @@ client = anthropic.Anthropic(
 
 ## Endpoints
 
--  — proxy status and daily spend
--  — detailed per-project stats
--  — proxy to Anthropic (same API as Anthropic)
+- `GET http://127.0.0.1:8080/health` — proxy status and daily spend
+- `GET http://127.0.0.1:8080/stats?day=2026-04-21` — detailed per-project stats
+- `POST http://127.0.0.1:8080/v1/messages` — proxy to Anthropic (same API as Anthropic)
+
 
 ## Logs
 
