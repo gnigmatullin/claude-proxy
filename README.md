@@ -52,18 +52,9 @@ apt install tmux
 
 # Start tmux session and run proxy
 tmux new-session -s claude-proxy
-cd /opt/claude-proxy && venv/bin/uvicorn main:app --host 0.0.0.0 --port 8080
+cd /opt/claude-proxy && venv/bin/uvicorn main:app --host 127.0.0.1 --port 8080
 # Enter master password when prompted
 # Then detach: Ctrl+B, then D
-```
-
-## After server reboot
-
-```bash
-tmux new-session -s claude-proxy
-cd /opt/claude-proxy && venv/bin/uvicorn main:app --host 0.0.0.0 --port 8080
-# Enter master password
-# Ctrl+B, then D
 ```
 
 ## Reconnect to proxy session
@@ -78,14 +69,7 @@ tmux attach -t claude-proxy
 ```python
 client = anthropic.Anthropic(
     api_key="sk-proxy-golf-xxxx",    # pseudo-key from proxy .env
-    base_url="http://localhost:8080", # or http://ODDSSERVER_IP:8080 from server 1
-)
-```
-
-### PHP (golf_update_tournament_map.php)
-```php
-define('ANTHROPIC_API_KEY', 'sk-proxy-golf-xxxx');  // pseudo-key
-define('ANTHROPIC_API_URL', 'http://ODDSSERVER_IP:8080');
+    base_url="http://localhost:8080",
 ```
 
 ## Endpoints
