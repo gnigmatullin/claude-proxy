@@ -1,3 +1,4 @@
+import os
 """
 main.py — Claude API proxy.
 
@@ -37,6 +38,8 @@ async def lifespan(app: FastAPI):
     global REAL_API_KEY
     database.init_db()
     REAL_API_KEY = load_real_key()  # prompts for password interactively
+    # Clear password from environment immediately after decryption
+    os.environ.pop("MASTER_PASSWORD", None)
     log.info("Claude proxy started on port %s", config.PORT)
     log.info("Allowed IPs:    %s", config.ALLOWED_IPS)
     log.info("Allowed models: %s", config.ALLOWED_MODELS)

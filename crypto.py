@@ -65,6 +65,9 @@ def load_real_key(password: str | None = None) -> str:
         )
 
     if password is None:
+        # Set by start.py via /dev/tty (in-memory only, never stored)
+        password = os.getenv("MASTER_PASSWORD")
+    if not password:
         import getpass
         password = getpass.getpass("Master password: ")
 
