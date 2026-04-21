@@ -50,18 +50,29 @@ def decrypt_key(ciphertext: str, password: str, salt: bytes) -> str:
     return f.decrypt(ciphertext.encode()).decode()
 
 
-def load_real_key() -> str:
-    """Load and decrypt the Anthropic API key from env vars."""
+def load_real_key(password: str | None = None) -> str:
+    """Load and decrypt the Anthropic API key.
+    
+    Password is taken from argument if provided,
+    otherwise prompted interactively from stdin.
+    """
     encrypted = os.getenv("ANTHROPIC_API_KEY_ENCRYPTED")
-    password = os.getenv("MASTER_PASSWORD")
     salt_b64 = os.getenv(SALT_ENV)
 
-    if not encrypted or not password or not salt_b64:
+    if not encrypted or not salt_b64:
         raise RuntimeError(
-            "Missing one of: ANTHROPIC_API_KEY_ENCRYPTED, MASTER_PASSWORD, CRYPTO_SALT"
+            "Missing one of: ANTHROPIC_API_KEY_ENCRYPTED, CRYPTO_SALT"
         )
+
+    if password is None:
+        import getpass
+        password = getpass.getpass("Master password: ")
+
     salt = base64.urlsafe_b64decode(salt_b64)
-    return decrypt_key(encrypted, password, salt)
+    try:
+        return decrypt_key(encrypted, password, salt)
+    except Exception:
+        raise RuntimeError("Wrong password or corrupted key")
 
 
 # ── CLI helper ────────────────────────────────────────────────────────────────

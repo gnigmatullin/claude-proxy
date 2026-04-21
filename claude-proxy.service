@@ -8,8 +8,10 @@ User=root
 WorkingDirectory=/opt/claude-proxy
 EnvironmentFile=/opt/claude-proxy/.env
 ExecStart=/opt/claude-proxy/venv/bin/uvicorn main:app --host 0.0.0.0 --port ${PORT}
-Restart=always
+Restart=on-failure
 RestartSec=5
+StandardInput=tty
+TTYPath=/dev/tty1
 StandardOutput=journal
 StandardError=journal
 

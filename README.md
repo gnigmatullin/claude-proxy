@@ -23,6 +23,7 @@ cp .env.example .env
 
 # 4. Generate crypto salt and encrypt your API key
 venv/bin/python crypto.py encrypt
+# Enter master password: (choose a strong password — NOT stored anywhere)
 # Copy CRYPTO_SALT and ANTHROPIC_API_KEY_ENCRYPTED output into .env
 
 # 5. Generate pseudo-keys for each project
@@ -63,7 +64,21 @@ define('ANTHROPIC_API_KEY', 'sk-proxy-golf-xxxx');  // pseudo-key
 define('ANTHROPIC_API_URL', 'http://ODDSSERVER_IP:8080');
 ```
 
-## Endpoints
+## Starting the proxy
+
+After server reboot, start manually and enter password:
+
+```bash
+systemctl start claude-proxy
+# The service will prompt: "Master password: "
+# Enter your password — it is never stored anywhere
+```
+
+Check status:
+```bash
+systemctl status claude-proxy
+curl http://localhost:8080/health
+```
 
 - `GET /health` — proxy status and daily spend
 - `GET /stats?day=2026-04-21` — detailed per-project stats
