@@ -1,0 +1,17 @@
+[Unit]
+Description=Claude API Proxy
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/claude-proxy
+EnvironmentFile=/opt/claude-proxy/.env
+ExecStart=/opt/claude-proxy/venv/bin/uvicorn main:app --host 0.0.0.0 --port ${PORT}
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
